@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+/* Teal pastel light theme global styles */
+body {
+  background-color: #f3f4f8; /* Soft grey background */
+  color: #1e293b; /* Deep slate text */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Light shimmer keyframes for skeletons */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-pulse {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Custom fade-in up transitions */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Premium PDF Print Styles */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Hide navigation controls, footer, and utility button lists */
+  header,
+  footer,
+  .sticky,
+  button,
+  .no-print,
+  #document-index-sidebar {
+    display: none !important;
+  }
+
+  /* Make sure columns expand to full widths on printing */
+  .grid-cols-4 {
+    display: block !important;
+  }
+  
+  .lg\:col-span-3 {
+    width: 100% !important;
+  }
+
+  /* Make cards look flat on paper */
+  section {
+    box-shadow: none !important;
+    border: none !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    margin-bottom: 2rem !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Clean page breaks */
+  h2, h3, h4 {
+    page-break-after: avoid !important;
+  }
+}
