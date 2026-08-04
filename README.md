@@ -1,8 +1,21 @@
 # Product X-Ray - Product Teardown Platform
 
+**Live URL:** [https://product-x-ray.vercel.app/](https://product-x-ray.vercel.app/)
+
 Product X-Ray is an interactive product management tool designed to generate instant, full-spectrum product teardowns for popular global and Indian companies. 
 
 Developed by **Pavitra Poojary**, the application provides structured, visual product breakdowns tailored to 25 target companies across several major business verticals.
+
+---
+
+## 🎯 Purpose & Motivation
+
+Product X-Ray was built to solve a key challenge faced by aspiring Product Managers (PMs), Business Analysts, and Designers: **accessing structured, visual, and framework-driven teardowns of popular companies instantly.**
+
+### Why it was built:
+1. **Framework-Driven Learning**: Business case studies are often long, text-heavy PDFs. This platform breaks down complex company cases into actionable PM frameworks (such as Jobs-To-Be-Done, Business Model Canvases, User Journey Maps, and PRDs) all in one interactive view.
+2. **Visual PM Sandbox**: Rather than reading static tables, the app demonstrates how key PM artifacts can be interactive—featuring dynamic SVG emotion charts tracking satisfaction along a user journey, and interactive Effort-vs-Impact scatter plots for backlog prioritization.
+3. **Speed & Accessibility**: By compiling high-fidelity industry-specific mock data, the app offers instant analysis for 25 major companies across FinTech, E-Commerce, Food Delivery, and Mobility verticals without network latency, API rate limits, or login walls.
 
 ---
 
@@ -41,6 +54,55 @@ Developed by **Pavitra Poojary**, the application provides structured, visual pr
 ├── package.json               # Package dependencies & scripts
 └── PROJECT_DETAILS.md         # Project documentation (this file)
 ```
+
+### High-Level Architecture Flow
+
+```mermaid
+graph TD
+    %% Define styles/classes
+    classDef ui fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0369a1;
+    classDef engine fill:#f0fdf4,stroke:#16a34a,stroke-width:2px,color:#15803d;
+    classDef visual fill:#faf5ff,stroke:#7c3aed,stroke-width:2px,color:#6d28d9;
+
+    subgraph UI_Layer [User Interface - React/TS]
+        App[App.tsx State Router]:::ui
+        Search[CompanySearch Component]:::ui
+        Selector[ModuleSelector Component]:::ui
+        Results[ResultsView Container]:::ui
+    end
+
+    subgraph Data_Layer [Data & Logic Engine]
+        Engine[mockData.ts Engine]:::engine
+        StaticData[(Precompiled Vertical Mock Templates)]:::engine
+    end
+
+    subgraph Vis_Layer [Visualization & Framework Modules]
+        Journey[User Journey Map + SVG Emotion Chart]:::visual
+        Backlog[Growth Backlog + SVG Effort-vs-Impact Plot]:::visual
+        BMC[Business Model Canvas 9-box Grid]:::visual
+        PRD[Product Requirement Document]:::visual
+        Personas[User Personas & Timeline]:::visual
+    end
+
+    %% Define Flow / Connections
+    App --> Search & Selector
+    Search --> |Selected Company| Engine
+    Selector --> |Selected Frameworks| App
+    Engine --> |Fetches vertical-specific data| StaticData
+    Engine --> |Sends structured JSON data| Results
+    Results --> |Renders Frameworks| Vis_Layer
+```
+
+---
+
+## ⚙️ Why Local Mock Data? (Architectural Decision)
+
+For demonstration and public hosting purposes, Product X-Ray utilizes a high-fidelity local mock engine rather than real-time LLM API fetches. This design decision was made due to several key factors:
+
+1. **API Key Safety & Token Costs**: Generating comprehensive, structured product teardowns (such as User Journeys, Business Model Canvases, and PRDs) requires heavy LLM token usage. Exposing private API keys in a client-side environment is insecure, and paying for backend token costs for a public portfolio demo is unsustainable.
+2. **Instant Latency & Snappiness**: Bypassing external API calls eliminates network latency and cold starts, allowing the user interface to render complex diagrams and switch between companies instantly.
+3. **Guaranteed Structure for UI Visualizations**: The application renders interactive SVG satisfaction line graphs, effort-vs-impact scatter plots, and a 9-box business model canvas. A local, vertical-based data generator ensures the structured inputs match the UI components perfectly, avoiding formatting errors typical of real-time AI generators.
+4. **Offline-First Resilience**: Hosting the application as a purely static site on platforms like Vercel allows it to remain lightweight, cost-free, and always online with zero database or API downtime dependencies.
 
 ---
 
